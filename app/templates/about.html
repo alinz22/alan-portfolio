@@ -1,0 +1,79 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="row align-items-center mb-5">
+  <div class="col-md-4 text-start mb-4 mb-md-0">
+    <img
+      src="{{ url_for('static', filename='img/me.jpg') }}"
+      alt="Alan Mong headshot"
+      class="rounded-circle shadow"
+      style="
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        object-position: 25% center;
+      "
+    />
+  </div>
+  <div class="col-md-8">
+    <h1 class="h2 fw-bold mb-3">About Me</h1>
+    <p>
+      I'm a CS student at Cal Poly Pomona and a two-time President's Honor List
+      recipient. As a Meta Production Engineering Fellow, I've gained hands-on
+      SRE experience while interning in both startup and enterprise environments
+      building scalable tooling. Outside of code you'll find me eating food with
+      loved ones or at music festivals.
+    </p>
+  </div>
+</div>
+
+<h2 class="h4 fw-bold mb-3">
+  <i class="fas fa-briefcase text-warning me-2"></i>Experience
+</h2>
+<div class="timeline border-start border-2 ps-3 mb-5">
+  {% for job in work %}
+  <div class="mb-4 position-relative">
+    <div class="position-absolute" style="left: -30px; top: 5px">
+      <i class="fas fa-circle text-primary" style="font-size: 10px"></i>
+    </div>
+    <h3 class="h6 fw-bold mb-0">
+      <i class="fas fa-laptop-code text-info me-2"></i>{{ job.role }} — {{
+      job.company }}
+    </h3>
+    <small class="text-info">
+      <i class="fas fa-map-marker-alt me-1"></i>{{ job.location }} •
+      <i class="fas fa-calendar-alt me-1"></i>{{ job.date }}
+    </small>
+    <ul class="mt-2">
+      {% for b in job.bullets %}
+      <li>{{ b }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>
+
+<h2 class="h4 fw-bold mb-3">
+  <i class="fas fa-graduation-cap text-success me-2"></i>Education
+</h2>
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th>School</th>
+      <th>Degree</th>
+      <th>Notes</th>
+      <th>Grad</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ed in edu %}
+    <tr>
+      <td>{{ ed.school }}</td>
+      <td>{{ ed.degree }}</td>
+      <td>{{ ed.notes }}</td>
+      <td>{{ ed.grad }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

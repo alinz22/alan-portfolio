@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block content %}
+
+<h1 class="h2 fw-bold mb-4">
+  <i class="fas fa-rocket text-warning me-2"></i>Highlighted Projects
+</h1>
+
+<div class="row g-4">
+  {% for p in projects %}
+  <div class="col-md-6 col-lg-4">
+    <div
+      class="card h-100 bg-secondary bg-opacity-10 border-0 text-light shadow-lg hover-lift"
+    >
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">
+          <i class="fas fa-project-diagram text-primary me-2"></i>
+          {% if p.link %}
+          <a
+            href="{{ p.link }}"
+            target="_blank"
+            class="text-decoration-none fw-bold text-light"
+            >{{ p.name }}
+            <i
+              class="fas fa-external-link-alt text-info ms-1"
+              style="font-size: 0.8em"
+            ></i
+          ></a>
+          {% else %} {{ p.name }} {% endif %}
+        </h5>
+        <h6 class="card-subtitle text-info mb-2">
+          <i class="fas fa-tools me-1"></i>{{ p.stack }}
+        </h6>
+        <ul class="small flex-grow-1">
+          {% for b in p.bullets %}
+          <li>{{ b }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

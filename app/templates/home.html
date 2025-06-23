@@ -1,0 +1,134 @@
+{% extends "base.html" %} {% block content %}
+<div class="text-center">
+  <div class="mb-4">
+    <i class="fas fa-code display-1 text-primary mb-3 pulse-animation"></i>
+  </div>
+  <h1 class="display-4 fw-bold mb-3 gradient-text">Hi, I'm Alan Mong 👋</h1>
+  <p class="lead mb-4">
+    Full-stack Software Engineer (prev @ AVEVA, Swing Phi) & Meta SRE Fellow who
+    loves shipping fast and scaling smart.
+  </p>
+  <p class="text-info mb-4">
+    <i class="fas fa-graduation-cap me-2"></i>
+    <strong>Graduating December 2026</strong> • Cal Poly Pomona
+  </p>
+  <a
+    href="{{ url_for('about') }}"
+    class="btn btn-primary btn-lg me-2 hover-lift"
+  >
+    <i class="fas fa-user me-2"></i>About Me
+  </a>
+  <a
+    href="{{ url_for('projects') }}"
+    class="btn btn-outline-light btn-lg hover-lift me-2"
+  >
+    <i class="fas fa-rocket me-2"></i>Projects
+  </a>
+  <a
+    href="#"
+    class="btn btn-success btn-lg hover-lift"
+    onclick="alert('Resume download feature coming soon!')"
+  >
+    <i class="fas fa-download me-2"></i>Resume
+  </a>
+</div>
+
+<!-- Stats Section -->
+<div class="row mt-5 mb-4">
+  <div class="col-md-3 text-center mb-3">
+    <div
+      class="card bg-transparent border border-primary text-light hover-lift"
+    >
+      <div class="card-body">
+        <i
+          class="fas fa-briefcase text-primary mb-2"
+          style="font-size: 2rem"
+        ></i>
+        <h3 class="fw-bold mb-0">2+</h3>
+        <small class="text-info">Internships</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 text-center mb-3">
+    <div
+      class="card bg-transparent border border-success text-light hover-lift"
+    >
+      <div class="card-body">
+        <i class="fas fa-award text-success mb-2" style="font-size: 2rem"></i>
+        <h3 class="fw-bold mb-0">2×</h3>
+        <small class="text-info">President's Honor List</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 text-center mb-3">
+    <div
+      class="card bg-transparent border border-warning text-light hover-lift"
+    >
+      <div class="card-body">
+        <i
+          class="fas fa-project-diagram text-warning mb-2"
+          style="font-size: 2rem"
+        ></i>
+        <h3 class="fw-bold mb-0">10+</h3>
+        <small class="text-info">Projects</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 text-center mb-3">
+    <div class="card bg-transparent border border-info text-light hover-lift">
+      <div class="card-body">
+        <i class="fas fa-code text-info mb-2" style="font-size: 2rem"></i>
+        <h3 class="fw-bold mb-0">{{ tech|length }}+</h3>
+        <small class="text-info">Technologies</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-md-6 mx-auto">
+    <div class="text-center mb-4">
+      <i class="fas fa-envelope text-info me-3"></i>
+      <a
+        href="mailto:alanmongx@gmail.com"
+        class="text-light text-decoration-none"
+        >alanmongx@gmail.com</a
+      >
+    </div>
+    <div class="text-center mb-4">
+      <i class="fab fa-linkedin text-info me-3"></i>
+      <a
+        href="https://linkedin.com/in/alan-mong"
+        class="text-light text-decoration-none"
+        target="_blank"
+        >linkedin.com/in/alan-mong</a
+      >
+    </div>
+    <div class="text-center mb-4">
+      <i class="fab fa-github text-info me-3"></i>
+      <a
+        href="https://github.com/alinz22"
+        class="text-light text-decoration-none"
+        target="_blank"
+        >github.com/alinz22</a
+      >
+    </div>
+  </div>
+</div>
+
+<hr class="my-5" />
+
+<div class="text-center mb-3">
+  <i class="fas fa-tools text-warning me-2"></i>
+  <h2 class="h4 text-uppercase fw-bold d-inline">Tech Stack</h2>
+</div>
+<div class="text-center">
+  {% for skill in tech %}
+  <span
+    class="badge bg-primary text-light me-2 mb-2 px-3 py-2 fw-bold border tech-badge"
+  >
+    <i class="{{ skill.icon }} me-2 text-light"></i>{{ skill.name }}
+  </span>
+  {% endfor %}
+</div>
+{% endblock %}
