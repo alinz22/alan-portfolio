@@ -1,12 +1,13 @@
 {% extends "base.html" %} {% block content %}
 
-<h1 class="h2 fw-bold mb-4">
-  <i class="fas fa-rocket text-warning me-2"></i>Highlighted Projects
+<h1 class="h2 fw-bold mb-4 fade-in-up gradient-text">
+  <i class="fas fa-rocket text-warning me-2 icon-bounce"></i>Highlighted
+  Projects
 </h1>
 
 <div class="row g-4">
   {% for p in projects %}
-  <div class="col-md-6 col-lg-4">
+  <div class="col-md-6 col-lg-4 fade-in-up card-flip">
     <div
       class="card h-100 bg-secondary bg-opacity-10 border-0 text-light shadow-lg hover-lift"
     >

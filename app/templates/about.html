@@ -1,11 +1,11 @@
 {% extends "base.html" %} {% block content %}
 
 <div class="row align-items-center mb-5">
-  <div class="col-md-4 text-start mb-4 mb-md-0">
+  <div class="col-md-4 text-start mb-4 mb-md-0 fade-in-up">
     <img
       src="{{ url_for('static', filename='img/me.jpg') }}"
       alt="Alan Mong headshot"
-      class="rounded-circle shadow"
+      class="rounded-circle shadow float-animation"
       style="
         width: 200px;
         height: 200px;
@@ -14,9 +14,9 @@
       "
     />
   </div>
-  <div class="col-md-8">
-    <h1 class="h2 fw-bold mb-3">About Me</h1>
-    <p>
+  <div class="col-md-8 fade-in-up">
+    <h1 class="h2 fw-bold mb-3 gradient-text">About Me</h1>
+    <p class="fade-in-up">
       I'm a CS student at Cal Poly Pomona and a two-time President's Honor List
       recipient. As a Meta Production Engineering Fellow, I've gained hands-on
       SRE experience while interning in both startup and enterprise environments
@@ -31,13 +31,16 @@
 </h2>
 <div class="timeline border-start border-2 ps-3 mb-5">
   {% for job in work %}
-  <div class="mb-4 position-relative">
+  <div class="mb-4 position-relative timeline-item">
     <div class="position-absolute" style="left: -30px; top: 5px">
-      <i class="fas fa-circle text-primary" style="font-size: 10px"></i>
+      <i
+        class="fas fa-circle text-primary pulse-animation"
+        style="font-size: 10px"
+      ></i>
     </div>
     <h3 class="h6 fw-bold mb-0">
-      <i class="fas fa-laptop-code text-info me-2"></i>{{ job.role }} — {{
-      job.company }}
+      <i class="fas fa-laptop-code text-info me-2 icon-bounce"></i>{{ job.role
+      }} — {{ job.company }}
     </h3>
     <small class="text-info">
       <i class="fas fa-map-marker-alt me-1"></i>{{ job.location }} •

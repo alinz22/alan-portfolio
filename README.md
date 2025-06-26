@@ -73,7 +73,7 @@ Welcome to my personal portfolio site built with Flask! This portfolio showcases
 ### Start the Development Server
 
 ```bash
-python3 -m flask --app app run --debug --port 5001
+export FLASK_APP=app && flask run --debug --port 5001
 ```
 
 You should see:
