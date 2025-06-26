@@ -1,12 +1,13 @@
 {% extends "base.html" %} {% block content %}
 
-<h1 class="h2 fw-bold mb-4">
-  <i class="fas fa-heart text-danger me-2"></i>My Hobbies & Interests
+<h1 class="h2 fw-bold mb-4 fade-in-up gradient-text">
+  <i class="fas fa-heart text-danger me-2 pulse-animation"></i>My Hobbies &
+  Interests
 </h1>
 
 <div class="row g-4">
   {% for hobby in hobbies %}
-  <div class="col-md-6 col-lg-6">
+  <div class="col-md-6 col-lg-6 fade-in-up card-flip">
     <div
       class="card h-100 bg-secondary bg-opacity-10 border-0 text-light shadow-lg hover-lift"
     >
@@ -15,7 +16,7 @@
           <img
             src="{{ url_for('static', filename='img/' + hobby.image) }}"
             alt="{{ hobby.name }}"
-            class="img-fluid rounded-start h-100 w-100"
+            class="img-fluid rounded-start h-100 w-100 float-animation"
             style="object-fit: cover; min-height: 200px"
             onerror="this.src='{{ url_for('static', filename='img/placeholder.jpg') }}'"
           />
@@ -23,7 +24,8 @@
         <div class="col-md-7">
           <div class="card-body d-flex flex-column h-100">
             <h5 class="card-title">
-              <i class="{{ hobby.icon }} text-primary me-2"></i>{{ hobby.name }}
+              <i class="{{ hobby.icon }} text-primary me-2 icon-bounce"></i>{{
+              hobby.name }}
             </h5>
             <p class="card-text flex-grow-1">{{ hobby.description }}</p>
           </div>
@@ -34,18 +36,20 @@
   {% endfor %}
 </div>
 
-<div class="mt-5 text-center">
-  <div class="card bg-secondary bg-opacity-10 border border-primary text-light">
+<div class="mt-5 text-center fade-in-up">
+  <div
+    class="card bg-secondary bg-opacity-10 border border-primary text-light hover-lift"
+  >
     <div class="card-body">
-      <h3 class="text-primary mb-3">
-        <i class="fas fa-comments me-2"></i>Let's Connect!
+      <h3 class="text-primary mb-3 gradient-text">
+        <i class="fas fa-comments me-2 pulse-animation"></i>Let's Connect!
       </h3>
       <p class="lead">
         Share similar interests? I'd love to hear about your hobbies and
         experiences!
       </p>
       <a href="mailto:alanmongx@gmail.com" class="btn btn-primary hover-lift">
-        <i class="fas fa-envelope me-2"></i>Get In Touch
+        <i class="fas fa-envelope me-2 icon-bounce"></i>Get In Touch
       </a>
     </div>
   </div>
