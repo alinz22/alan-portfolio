@@ -10,27 +10,48 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET", "dev_key")
 
-mydb = MySQLDatabase(
-    os.getenv("MYSQL_DATABASE"),
-    user=os.getenv("MYSQL_USER"),
-    password=os.getenv("MYSQL_PASSWORD"),
-    host=os.getenv("MYSQL_HOST"),
-    port=3306,
-)
+# Database configuration - only initialize if all required variables are present
+db_config = {
+    'database': os.getenv("MYSQL_DATABASE"),
+    'user': os.getenv("MYSQL_USER"),
+    'password': os.getenv("MYSQL_PASSWORD"),
+    'host': os.getenv("MYSQL_HOST", "localhost"),
+    'port': 3306,
+}
 
-print(mydb)   # this is what produces the line the assignment wants
+# Check if all required database variables are present
+db_enabled = all([
+    db_config['database'],
+    db_config['user'],
+    db_config['password'],
+    db_config['host']
+])
 
-class TimelinePost(Model):
-    name = CharField()
-    email = CharField()
-    content = TextField()
-    created_at = DateTimeField(default=datetime.datetime.now)
+if db_enabled:
+    mydb = MySQLDatabase(**db_config)
+    print(mydb)   # this is what produces the line the assignment wants
+    
+    class TimelinePost(Model):
+        name = CharField()
+        email = CharField()
+        content = TextField()
+        created_at = DateTimeField(default=datetime.datetime.now)
 
-    class Meta:
-        database = mydb
+        class Meta:
+            database = mydb
 
-mydb.connect()
-mydb.create_tables([TimelinePost])
+    # Initialize database connection and create tables
+    try:
+        mydb.connect()
+        mydb.create_tables([TimelinePost])
+        print("Database connected and tables created successfully")
+    except Exception as e:
+        print(f"Database connection failed: {e}")
+        db_enabled = False
+else:
+    print("Database configuration incomplete - timeline features will be disabled")
+    mydb = None
+    TimelinePost = None
 
 PAGES = [
     {"endpoint": "home", "name": "Home", "icon": "fas fa-home"},
@@ -76,6 +97,9 @@ def timeline():
 
 @app.route('/api/timeline_post', methods=['POST'])
 def post_timeline_post():
+    if not db_enabled or not TimelinePost:
+        return {'error': 'Database not configured'}, 500
+    
     name = request.form['name']
     email = request.form['email']
     content = request.form['content']
@@ -84,6 +108,9 @@ def post_timeline_post():
 
 @app.route('/api/timeline_post', methods=['GET'])
 def get_timeline_post():
+    if not db_enabled or not TimelinePost:
+        return {'timeline_posts': []}
+    
     return {
         'timeline_posts': [
             model_to_dict(p) 
@@ -93,6 +120,9 @@ def get_timeline_post():
 
 @app.route('/api/timeline_post/<int:post_id>', methods=['DELETE'])
 def delete_timeline_post(post_id):
+    if not db_enabled or not TimelinePost:
+        return {'error': 'Database not configured'}, 500
+    
     try:
         deleted = TimelinePost.delete_by_id(post_id)
         return {'deleted': bool(deleted)}
