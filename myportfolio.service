@@ -10,7 +10,11 @@ Group=root
 WorkingDirectory=/root/alan-portfolio
 Environment=FLASK_APP=app
 Environment=FLASK_ENV=production
-EnvironmentFile=/root/alan-portfolio/.env
+Environment=MYSQL_HOST=localhost
+Environment=MYSQL_USER=myportfolio
+Environment=MYSQL_PASSWORD=password
+Environment=MYSQL_DATABASE=myportfolio
+Environment=FLASK_SECRET=dev_key
 ExecStart=/root/alan-portfolio/python3-virtualenv/bin/python -m flask run --host=0.0.0.0 --port=8000
 Restart=always
 RestartSec=3
