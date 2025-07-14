@@ -1,28 +1,19 @@
 [Unit]
-Description=Alan's Portfolio Flask Application
-After=network.target mysqld.service
-Requires=mysqld.service
+Description=Serve Portfolio Site
+After=network.target
 
 [Service]
-Type=simple
 User=root
 Group=root
 WorkingDirectory=/root/alan-portfolio
 Environment=FLASK_APP=app
-Environment=FLASK_ENV=production
 Environment=MYSQL_HOST=localhost
 Environment=MYSQL_USER=myportfolio
 Environment=MYSQL_PASSWORD=password
 Environment=MYSQL_DATABASE=myportfolio
 Environment=FLASK_SECRET=dev_key
-ExecStart=/root/alan-portfolio/python3-virtualenv/bin/python -m flask run --host=0.0.0.0 --port=8000
+ExecStart=/root/alan-portfolio/python3-virtualenv/bin/python /root/alan-portfolio/python3-virtualenv/bin/flask run --host=0.0.0.0 --port=8000
 Restart=always
-RestartSec=3
-
-# Logging
-StandardOutput=journal
-StandardError=journal
-SyslogIdentifier=myportfolio
 
 [Install]
 WantedBy=multi-user.target 
