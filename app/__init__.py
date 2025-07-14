@@ -38,6 +38,7 @@ PAGES = [
     {"endpoint": "projects", "name": "Projects", "icon": "fas fa-rocket"},
     {"endpoint": "hobbies", "name": "Hobbies", "icon": "fas fa-heart"},
     {"endpoint": "travel", "name": "Travel", "icon": "fas fa-map-marked-alt"},
+    {"endpoint": "timeline", "name": "Timeline", "icon": "fas fa-clock"},
 ]
 
 def render(page, **ctx):
@@ -68,6 +69,10 @@ def hobbies():
 @app.route("/travel")
 def travel():
     return render("travel", title="Travel Map", locations=TRAVEL_LOCATIONS)
+
+@app.route("/timeline")
+def timeline():
+    return render_template("timeline.html", title="Timeline")
 
 @app.route('/api/timeline_post', methods=['POST'])
 def post_timeline_post():
