@@ -1,54 +1,50 @@
 from flask import Flask, render_template, request
 from dotenv import load_dotenv
-from peewee import MySQLDatabase, Model, CharField, TextField, DateTimeField
+from peewee import MySQLDatabase, Model, CharField, TextField, DateTimeField, SqliteDatabase
 from playhouse.shortcuts import model_to_dict
 import datetime
 import os
+import re
 from data import WORK_EXPERIENCE, EDUCATION, PROJECTS, TECH_SKILLS, HOBBIES, TRAVEL_LOCATIONS
 
 load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET", "dev_key")
 
-# Database configuration - only initialize if all required variables are present
-db_config = {
+if os.getenv("TESTING") == "true":
+    print("Running in testing mode")
+    mydb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
+else:
+    print("Running normally")
+    # Database configuration - only initialize if all required variables are present
+    db_config = {
     'database': os.getenv("MYSQL_DATABASE"),
     'user': os.getenv("MYSQL_USER"),
     'password': os.getenv("MYSQL_PASSWORD"),
     'host': os.getenv("MYSQL_HOST", "localhost"),
     'port': 3306,
-}
-
-# Check if all required database variables are present
-db_enabled = all([
-    db_config['database'],
-    db_config['user'],
-    db_config['password'],
-    db_config['host']
-])
-
-if db_enabled:
+    }
+    # set database to .env variables
     mydb = MySQLDatabase(**db_config)
-    print(mydb)   # this is what produces the line the assignment wants
-    
-    class TimelinePost(Model):
-        name = CharField()
-        email = CharField()
-        content = TextField()
-        created_at = DateTimeField(default=datetime.datetime.now)
 
-        class Meta:
-            database = mydb
+EMAIL_RE = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
-    # Initialize database connection and create tables
-    try:
-        mydb.connect()
-        mydb.create_tables([TimelinePost])
-        print("Database connected and tables created successfully")
-    except Exception as e:
-        print(f"Database connection failed: {e}")
-        db_enabled = False
-else:
+class TimelinePost(Model):
+    name = CharField()
+    email = CharField()
+    content = TextField()
+    created_at = DateTimeField(default=datetime.datetime.now)
+
+    class Meta:
+        database = mydb
+
+# Initialize database connection and create tables
+try:
+    mydb.connect()
+    mydb.create_tables([TimelinePost])
+    print("Database connected and tables created successfully")
+except Exception as e:
+    print(f"Database connection failed: {e}")
     print("Database configuration incomplete - timeline features will be disabled")
     mydb = None
     TimelinePost = None
@@ -97,18 +93,26 @@ def timeline():
 
 @app.route('/api/timeline_post', methods=['POST'])
 def post_timeline_post():
-    if not db_enabled or not TimelinePost:
+    if not mydb or not TimelinePost:
         return {'error': 'Database not configured'}, 500
     
-    name = request.form['name']
-    email = request.form['email']
-    content = request.form['content']
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    content = request.form.get('content', '').strip()
+
+    if not name:
+        return "Invalid name", 400
+    if not content:
+        return "Invalid content", 400
+    if not EMAIL_RE.fullmatch(email):
+        return "Invalid email", 400
+
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
     return model_to_dict(timeline_post)
 
 @app.route('/api/timeline_post', methods=['GET'])
 def get_timeline_post():
-    if not db_enabled or not TimelinePost:
+    if not mydb or not TimelinePost:
         return {'timeline_posts': []}
     
     return {
@@ -120,7 +124,7 @@ def get_timeline_post():
 
 @app.route('/api/timeline_post/<int:post_id>', methods=['DELETE'])
 def delete_timeline_post(post_id):
-    if not db_enabled or not TimelinePost:
+    if not mydb or not TimelinePost:
         return {'error': 'Database not configured'}, 500
     
     try:
