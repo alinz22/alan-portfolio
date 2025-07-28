@@ -43,8 +43,8 @@ cp example.env .env
 # Edit .env and set CERTBOT_EMAIL to your email
 
 # Update nginx configuration
-# Edit user_conf.d/myportfolio.conf and replace pe-week1-demo.duckdns.org
-# with your actual domain name
+# Edit user_conf.d/myportfolio.conf with your domain
+# (default: alan00.duckdns.org)
 
 # Deploy with the production compose file
 docker compose -f docker-compose.prod.yml up -d
