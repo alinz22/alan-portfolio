@@ -11,6 +11,47 @@ Welcome to my personal portfolio site built with Flask! This portfolio showcases
 - **Travel Page**: Interactive map showing 11+ cities across 4 countries
 - **Responsive Design**: Modern dark theme with hover animations
 
+## 🐳 Docker Deployment
+
+This portfolio is containerized using Docker and orchestrated with Docker Compose for easy deployment.
+
+### Quick Deploy with Docker Compose
+
+```bash
+# Clone the repository
+git clone https://github.com/alinz22/alan-portfolio.git
+cd alan-portfolio
+
+# Copy and configure environment variables
+cp example.env .env
+# Edit .env with your MySQL credentials
+
+# Run with Docker Compose
+docker compose up -d
+
+# View logs
+docker compose logs -f
+```
+
+### Production Deployment
+
+For production deployment on a VPS:
+
+```bash
+# Use the production compose file
+docker compose -f docker-compose.prod.yml up -d
+
+# Or use the redeploy script
+./redeploy-site.sh
+```
+
+The `redeploy-site.sh` script handles:
+
+- Pulling latest changes from GitHub
+- Stopping existing containers
+- Building and starting new containers
+- Displaying container status
+
 ## ✅ Completed Tasks
 
 ### GitHub Tasks
