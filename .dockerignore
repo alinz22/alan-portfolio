@@ -1,0 +1,16 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.DS_Store
+*.db
+*.sqlite
+.env.local
+.env.*.local
+myportfolio.service
+deploy_to_vps.sh
+vps_setup.sh
+tests/
+*.log 
