@@ -21,6 +21,8 @@ if os.getenv("TESTING") == "true":
     print("Running in testing mode")
     try:
         mydb = SqliteDatabase(':memory:')
+        mydb.connect()
+        print("SQLite database connected")
         
         class TimelinePost(Model):
             name = CharField()
@@ -31,11 +33,17 @@ if os.getenv("TESTING") == "true":
             class Meta:
                 database = mydb
         
-        mydb.connect()
-        mydb.create_tables([TimelinePost])
+        mydb.create_tables([TimelinePost], safe=True)
         print("Testing database (SQLite) connected and tables created successfully")
+        
+        # Verify table was created
+        tables = mydb.get_tables()
+        print(f"Tables in database: {tables}")
+        
     except Exception as e:
         print(f"Testing database connection failed: {e}")
+        import traceback
+        traceback.print_exc()
         mydb = None
         TimelinePost = None
 else:
