@@ -11,43 +11,68 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET", "dev_key")
 
-if os.getenv("TESTING") == "true":
-    print("Running in testing mode")
-    mydb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
-else:
-    print("Running normally")
-    # Database configuration - only initialize if all required variables are present
-    db_config = {
-    'database': os.getenv("MYSQL_DATABASE"),
-    'user': os.getenv("MYSQL_USER"),
-    'password': os.getenv("MYSQL_PASSWORD"),
-    'host': os.getenv("MYSQL_HOST", "localhost"),
-    'port': 3306,
-    }
-    # set database to .env variables
-    mydb = MySQLDatabase(**db_config)
-
 EMAIL_RE = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
-class TimelinePost(Model):
-    name = CharField()
-    email = CharField()
-    content = TextField()
-    created_at = DateTimeField(default=datetime.datetime.now)
+# Database initialization
+mydb = None
+TimelinePost = None
 
-    class Meta:
-        database = mydb
+if os.getenv("TESTING") == "true":
+    print("Running in testing mode")
+    try:
+        mydb = SqliteDatabase(':memory:')
+        
+        class TimelinePost(Model):
+            name = CharField()
+            email = CharField()
+            content = TextField()
+            created_at = DateTimeField(default=datetime.datetime.now)
 
-# Initialize database connection and create tables
-try:
-    mydb.connect()
-    mydb.create_tables([TimelinePost])
-    print("Database connected and tables created successfully")
-except Exception as e:
-    print(f"Database connection failed: {e}")
-    print("Database configuration incomplete - timeline features will be disabled")
-    mydb = None
-    TimelinePost = None
+            class Meta:
+                database = mydb
+        
+        mydb.connect()
+        mydb.create_tables([TimelinePost])
+        print("Testing database (SQLite) connected and tables created successfully")
+    except Exception as e:
+        print(f"Testing database connection failed: {e}")
+        mydb = None
+        TimelinePost = None
+else:
+    print("Running normally")
+    try:
+        # Database configuration - only initialize if all required variables are present
+        db_config = {
+            'database': os.getenv("MYSQL_DATABASE"),
+            'user': os.getenv("MYSQL_USER"),
+            'password': os.getenv("MYSQL_PASSWORD"),
+            'host': os.getenv("MYSQL_HOST", "localhost"),
+            'port': 3306,
+        }
+        
+        # Check if all required config is present
+        if all([db_config['database'], db_config['user'], db_config['password']]):
+            mydb = MySQLDatabase(**db_config)
+            
+            class TimelinePost(Model):
+                name = CharField()
+                email = CharField()
+                content = TextField()
+                created_at = DateTimeField(default=datetime.datetime.now)
+
+                class Meta:
+                    database = mydb
+            
+            mydb.connect()
+            mydb.create_tables([TimelinePost])
+            print("MySQL database connected and tables created successfully")
+        else:
+            print("Missing MySQL configuration - timeline features will be disabled")
+    except Exception as e:
+        print(f"Database connection failed: {e}")
+        print("Database configuration incomplete - timeline features will be disabled")
+        mydb = None
+        TimelinePost = None
 
 PAGES = [
     {"endpoint": "home", "name": "Home", "icon": "fas fa-home"},
