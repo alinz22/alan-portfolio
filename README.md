@@ -35,15 +35,30 @@ docker compose logs -f
 
 ### Production Deployment
 
-For production deployment on a VPS:
+For production deployment on a VPS with HTTPS:
 
 ```bash
-# Use the production compose file
+# Configure your domain and email
+cp example.env .env
+# Edit .env and set CERTBOT_EMAIL to your email
+
+# Update nginx configuration
+# Edit user_conf.d/myportfolio.conf and replace pe-week1-demo.duckdns.org
+# with your actual domain name
+
+# Deploy with the production compose file
 docker compose -f docker-compose.prod.yml up -d
 
 # Or use the redeploy script
 ./redeploy-site.sh
 ```
+
+The production setup includes:
+
+- **Nginx reverse proxy** with automatic HTTPS
+- **Let's Encrypt** SSL certificates (auto-renewed)
+- **HTTP to HTTPS** redirect
+- **Docker networking** for secure container communication
 
 The `redeploy-site.sh` script handles:
 
