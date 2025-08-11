@@ -18,7 +18,7 @@ jobs:
         run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} 'cd ${{ secrets.PROJECT_ROOT }} && ./redeploy-site.sh'
       
       - name: Print container status
-        run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} 'cd ${{ secrets.PROJECT_ROOT }} && docker-compose ps'
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} 'cd ${{ secrets.PROJECT_ROOT }} && docker compose -f docker-compose.prod.yml ps'
       
       - name: Send Discord notification on success
         if: success()
