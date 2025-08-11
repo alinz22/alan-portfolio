@@ -9,12 +9,11 @@ jobs:
     name: "Deploy to VPS"
     runs-on: ubuntu-latest
     steps:
-      - name: Print project root directory
-        uses: appleboy/ssh-action@master
+      - name: Setup SSH Key
+        uses: webfactory/ssh-agent@v0.7.0
         with:
-          host: ${{ secrets.SSH_IP }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd ${{ secrets.PROJECT_ROOT }}
-            pwd
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Print project root directory
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} 'cd ${{ secrets.PROJECT_ROOT }} && pwd'
