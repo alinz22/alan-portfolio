@@ -16,3 +16,16 @@ jobs:
       
       - name: Deploy site
         run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} 'cd ${{ secrets.PROJECT_ROOT }} && ./redeploy-site.sh'
+      
+      - name: Print container status
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} 'cd ${{ secrets.PROJECT_ROOT }} && docker-compose ps'
+      
+      - name: Send Discord notification on success
+        if: success()
+        run: |
+          curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚀 Deployment Successful"
+      
+      - name: Send Discord notification on failure
+        if: failure()
+        run: |
+          curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚨 Deployment Failed"
